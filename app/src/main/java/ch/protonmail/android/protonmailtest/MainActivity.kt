@@ -16,13 +16,8 @@ class MainActivity : AppCompatActivity() {
         val pager = findViewById<ViewPager>(R.id.pager)
         val adapter = TabsAdapter(this, supportFragmentManager)
         pager.adapter = adapter
-        initTabs()
-    }
-
-    fun initTabs() {
-        //TODO
         val tabs = findViewById<TabLayout>(R.id.tabLayout);
-        tabs.addTab(tabs.newTab().setText("Tab 1"))
-        tabs.addTab(tabs.newTab().setText("Tab 2"))
+        tabs.addTab(tabs.newTab().setText("upcoming"))
+        tabs.addTab(tabs.newTab().setText("hottest"))
     }
 }
