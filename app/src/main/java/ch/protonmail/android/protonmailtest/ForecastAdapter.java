@@ -44,6 +44,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.DayVie
         holder.day.setText("day : " + info.getDay());
         holder.description.setText(info.getDescription());
         holder.chanceRain.setText("rain rate : " + info.getChance_rain());
+        holder.highTemp.setText("high temp : " + info.getHigh() + "°");
         Glide.with(mContext)
                 .load(info.getImage())
                 .skipMemoryCache(true)
@@ -61,6 +62,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.DayVie
         private TextView day;
         private TextView description;
         private TextView chanceRain;
+        private TextView highTemp;
         private ImageView imageView;
 
         DayViewHolder(@NonNull View v) {
@@ -69,6 +71,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.DayVie
             description = v.findViewById(R.id.description);
             imageView = v.findViewById(R.id.image);
             chanceRain = v.findViewById(R.id.chance_rain);
+            highTemp = v.findViewById(R.id.high_tmp);
         }
     }
 }
