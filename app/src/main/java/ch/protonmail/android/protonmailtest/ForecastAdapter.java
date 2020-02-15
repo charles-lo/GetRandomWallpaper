@@ -4,48 +4,71 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+
+import java.util.List;
+
+import ch.protonmail.android.protonmailtest.model.WeatherInfo;
 
 /**
  * Created by ProtonMail on 2/25/19.
  */
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.DayViewHolder> {
 
-    String[] data;
+    private List<WeatherInfo> m_Data;
     private Context mContext;
 
     @NonNull
     @Override
     public DayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View item = LayoutInflater.from(mContext).inflate(R.layout.item_forecast , parent ,false);
+        View item = LayoutInflater.from(mContext).inflate(R.layout.item_forecast, parent, false);
 
         return new ForecastAdapter.DayViewHolder(item);
     }
 
-    public ForecastAdapter(Context mContext) {
+    public ForecastAdapter(Context mContext, List<WeatherInfo> data) {
         this.mContext = mContext;
-//        this.mDatas = mDatas;
+        this.m_Data = data;
     }
 
 
     @Override
     public void onBindViewHolder(@NonNull DayViewHolder holder, int position) {
-//        holder.titleView.setText(data[0]);
+        WeatherInfo info = m_Data.get(position);
+        holder.day.setText("day : " + info.getDay());
+        holder.description.setText(info.getDescription());
+        holder.chanceRain.setText("rain rate : " + info.getChance_rain());
+        Glide.with(mContext)
+                .load(info.getImage())
+                .skipMemoryCache(true)
+                .placeholder(R.drawable.ic_launcher_background)
+                .into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return m_Data.size();
     }
 
-    public static class DayViewHolder extends RecyclerView.ViewHolder {
+    static class DayViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView titleView;
-        public DayViewHolder(@NonNull View v) {
+        private TextView day;
+        private TextView description;
+        private TextView chanceRain;
+        private ImageView imageView;
+
+        DayViewHolder(@NonNull View v) {
             super(v);
-//            titleView = v;
+            day = v.findViewById(R.id.day);
+            description = v.findViewById(R.id.description);
+            imageView = v.findViewById(R.id.image);
+            chanceRain = v.findViewById(R.id.chance_rain);
         }
     }
 }

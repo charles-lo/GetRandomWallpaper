@@ -1,68 +1,45 @@
 package ch.protonmail.android.protonmailtest
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.net.HttpURLConnection
-import java.net.URL
+import ch.protonmail.android.protonmailtest.model.WeatherInfo
+import ch.protonmail.android.protonmailtest.viewmodel.ProtonViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * Created by ProtonMail on 2/25/19.
  * Shows any days that have less than a 50% chance of rain, ordered hottest to coldest
  * */
 class HottestFragment : Fragment() {
+    private val protonListModel: ProtonViewModel by viewModel()
 
-    // TODO: Please fix any errors and implement the missing parts (including any UI changes)
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val rootView = inflater.inflate(R.layout.fragment_hottest, container, false)
 
-        val layoutManager = LinearLayoutManager(context)
-        val adapter = ForecastAdapter(context)
+        protonListModel.getHottest()
+        protonListModel.listOfHottest.observe(
+            this,
+            Observer(function = fun(productList: List<WeatherInfo>?) {
+                productList?.let {
 
-        val recycler = rootView.findViewById<RecyclerView>(R.id.recycler_view)
-        recycler.adapter = adapter
-        recycler.layoutManager = layoutManager
-        fetchData()
+                    val layoutManager = LinearLayoutManager(context)
+                    val adapter = ForecastAdapter(context, productList)
+                    val recycler = rootView.findViewById<RecyclerView>(R.id.recycler_view)
+                    recycler.layoutManager = layoutManager
+                    recycler.adapter = adapter
+                }
+            })
+        )
         return rootView
-    }
-
-    fun fetchData() {
-        if (dataPresentInLocalStorage()) {
-            fetchDataFromLocalStorage()
-        } else {
-            fetchDataFromServer()
-        }
-    }
-
-    fun fetchDataFromServer() {
-        FetchDataFromServerTask().execute()
-    }
-
-    fun fetchDataFromLocalStorage(): Array<String>? {
-        // TODO implement
-        return null
-    }
-
-    fun dataPresentInLocalStorage(): Boolean = true
-
-    class FetchDataFromServerTask : AsyncTask<String, String, String>() {
-        override fun doInBackground(vararg p0: String?): String {
-            val url = URL("https://5c5c8ba58d018a0014aa1b24.mockapi.io/api/forecast")
-            val httpURLConnection = url.openConnection() as HttpURLConnection
-            httpURLConnection.connect()
-
-            val responseCode: Int = httpURLConnection.responseCode
-
-            var response: String = ""
-            if (responseCode == 200) {
-                response = httpURLConnection.responseMessage
-            }
-            return response
-        }
     }
 }

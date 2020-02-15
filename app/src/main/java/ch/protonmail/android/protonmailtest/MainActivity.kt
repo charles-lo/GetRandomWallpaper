@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
-import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,8 +15,5 @@ class MainActivity : AppCompatActivity() {
         val pager = findViewById<ViewPager>(R.id.pager)
         val adapter = TabsAdapter(this, supportFragmentManager)
         pager.adapter = adapter
-        val tabs = findViewById<TabLayout>(R.id.tabLayout);
-        tabs.addTab(tabs.newTab().setText("upcoming"))
-        tabs.addTab(tabs.newTab().setText("hottest"))
     }
 }

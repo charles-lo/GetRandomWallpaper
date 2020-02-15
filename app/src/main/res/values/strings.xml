@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ProtonMailTest</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="hottest">Hottest</string>
 </resources>
