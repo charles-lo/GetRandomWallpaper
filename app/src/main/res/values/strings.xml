@@ -1,5 +1,13 @@
 <resources>
-    <string name="app_name">ProtonMailTest</string>
+    <string name="app_name">ProtonMailTest_by_Charles</string>
     <string name="upcoming">Upcoming</string>
     <string name="hottest">Hottest</string>
+    <string name="day">day : %d</string>
+    <string name="sunrise">sunrise : %d</string>
+    <string name="sunset">sunset : %d</string>
+    <string name="chance_rain">rain rate : %.2f</string>
+    <string name="high">high temp : %d</string>
+    <string name="low">low temp : %d</string>
+    <string name="download">Download</string>
+    <string name="gallery">Gallery</string>
 </resources>

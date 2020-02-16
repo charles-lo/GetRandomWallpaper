@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import ch.protonmail.android.protonmailtest.model.WeatherInfo
 import ch.protonmail.android.protonmailtest.viewmodel.ProtonViewModel
 import com.google.gson.Gson
@@ -20,7 +21,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
  * Created by ProtonMail on 2/25/19.
  * Shows any days that have less than a 50% chance of rain, ordered hottest to coldest
  * */
-class HottestFragment : Fragment() {
+class HottestFragment : Fragment()  {
     private val TAG = HottestFragment::class.qualifiedName
     private val protonModel: ProtonViewModel by viewModel()
 
@@ -35,7 +36,10 @@ class HottestFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_hottest, container, false)
-        val gson = Gson()
+        val swipeRefreshLayout = rootView.findViewById<SwipeRefreshLayout>(R.id.swipe_container)
+        swipeRefreshLayout.setOnRefreshListener(refreshListener)
+
+        val gSon = Gson()
         val preference = activity?.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
 
         protonModel.getHottest()
@@ -43,7 +47,7 @@ class HottestFragment : Fragment() {
             this,
             Observer(function = fun(infoList: List<WeatherInfo>?) {
                 infoList?.let {
-
+                    swipeRefreshLayout.isRefreshing = false
                     if (infoList.isNotEmpty()) {
                         val sortedList = infoList.filter { it.chance_rain < 0.5 }
                             .sortedWith(compareByDescending(WeatherInfo::high))
@@ -51,7 +55,7 @@ class HottestFragment : Fragment() {
                         updateList(rootView, sortedList)
                         // save local cache
                         preference?.edit()
-                            ?.putString(HOTTEST, gson.toJson(sortedList))
+                            ?.putString(HOTTEST, gSon.toJson(sortedList))
                             ?.apply()
                     } else {
                         // check local cache
@@ -59,7 +63,7 @@ class HottestFragment : Fragment() {
                         val type = object : TypeToken<List<WeatherInfo>>() {}.type
 
                         if (strCache!!.isNotBlank()) {
-                            val infoCache: List<WeatherInfo> = gson.fromJson(strCache, type)
+                            val infoCache: List<WeatherInfo> = gSon.fromJson(strCache, type)
                             Log.d(TAG, "" + infoCache)
 
                             if (infoCache.isNotEmpty()) {
@@ -73,6 +77,10 @@ class HottestFragment : Fragment() {
             })
         )
         return rootView
+    }
+
+    private val refreshListener = SwipeRefreshLayout.OnRefreshListener{
+        protonModel.getHottest()
     }
 
     private fun updateList(rootView: View, infoList: List<WeatherInfo>) {
