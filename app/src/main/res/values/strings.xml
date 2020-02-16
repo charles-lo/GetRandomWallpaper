@@ -10,4 +10,5 @@
     <string name="low">low temp : %d</string>
     <string name="download">Download</string>
     <string name="gallery">Gallery</string>
+    <string name="offline">offline</string>
 </resources>

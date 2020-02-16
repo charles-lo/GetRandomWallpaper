@@ -5,13 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ch.protonmail.android.protonmailtest.model.WeatherInfo
 import ch.protonmail.android.protonmailtest.repository.DataRepository
-import org.koin.standalone.KoinComponent
+import org.koin.core.KoinComponent
 
 
 class ProtonViewModel(val dataRepository: DataRepository) : ViewModel(), KoinComponent {
-    private val TAG = ProtonViewModel::class.qualifiedName
+    private val TAG = ProtonViewModel::class.simpleName
     var listOfUpcoming = MutableLiveData<List<WeatherInfo>>()
     var listOfHottest = MutableLiveData<List<WeatherInfo>>()
+    var networkError = MutableLiveData<Boolean>()
 
     init {
         listOfUpcoming.value = listOf()
@@ -29,6 +30,7 @@ class ProtonViewModel(val dataRepository: DataRepository) : ViewModel(), KoinCom
                 msg?.let{
                     Log.d(TAG, msg)
                 }
+                networkError.value = true
             }
         })
     }
@@ -44,6 +46,7 @@ class ProtonViewModel(val dataRepository: DataRepository) : ViewModel(), KoinCom
                 msg?.let{
                     Log.d(TAG, msg)
                 }
+                networkError.value = true
             }
         })
     }

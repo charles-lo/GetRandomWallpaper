@@ -5,7 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,7 +26,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
  * Shows any days that have less than a 50% chance of rain, ordered hottest to coldest
  * */
 class HottestFragment : Fragment()  {
-    private val TAG = HottestFragment::class.qualifiedName
+    private val TAG = HottestFragment::class.simpleName
     private val protonModel: ProtonViewModel by viewModel()
 
     companion object {
@@ -42,12 +46,20 @@ class HottestFragment : Fragment()  {
         val gSon = Gson()
         val preference = activity?.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
 
-        protonModel.getHottest()
+        protonModel.networkError.observe(this,
+            Observer(function = fun(_: Boolean?) {
+                swipeRefreshLayout.isRefreshing = false
+                Toast.makeText(activity, "internet offline", Toast.LENGTH_SHORT).show()
+                activity?.findViewById<TextView>(R.id.offline)?.visibility = VISIBLE
+            }
+            )
+        )
         protonModel.listOfHottest.observe(
             this,
             Observer(function = fun(infoList: List<WeatherInfo>?) {
                 infoList?.let {
                     swipeRefreshLayout.isRefreshing = false
+                    activity?.findViewById<TextView>(R.id.offline)?.visibility = GONE
                     if (infoList.isNotEmpty()) {
                         val sortedList = infoList.filter { it.chance_rain < 0.5 }
                             .sortedWith(compareByDescending(WeatherInfo::high))
@@ -76,6 +88,7 @@ class HottestFragment : Fragment()  {
                 }
             })
         )
+        protonModel.getHottest()
         return rootView
     }
 

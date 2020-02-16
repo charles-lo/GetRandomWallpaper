@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,7 +24,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
  * Shows the upcoming list of days returned by the API in order of day
  **/
 class UpcomingFragment : Fragment() {
-    private val TAG = UpcomingFragment::class.qualifiedName
+    private val TAG = UpcomingFragment::class.simpleName
     private val protonModel: ProtonViewModel by viewModel()
 
     companion object {
@@ -42,12 +44,22 @@ class UpcomingFragment : Fragment() {
         val gSon = Gson()
         val preference = activity?.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
 
+        protonModel.networkError.observe(this,
+            Observer(function = fun(_: Boolean?) {
+                swipeRefreshLayout.isRefreshing = false
+                Toast.makeText(activity, "internet offline", Toast.LENGTH_SHORT).show()
+                activity?.findViewById<TextView>(R.id.offline)?.visibility = View.VISIBLE
+            }
+            )
+        )
+
         protonModel.getUpcoming()
         protonModel.listOfUpcoming.observe(
             this,
             Observer(function = fun(infoList: List<WeatherInfo>?) {
                 infoList?.let {
                     swipeRefreshLayout.isRefreshing = false
+                    activity?.findViewById<TextView>(R.id.offline)?.visibility = View.GONE
                     if (infoList.isNotEmpty()) {
                         val sortedList = infoList.sortedWith(compareBy(WeatherInfo::day))
 
