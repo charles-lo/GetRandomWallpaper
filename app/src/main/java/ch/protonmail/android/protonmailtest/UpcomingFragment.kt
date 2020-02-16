@@ -96,7 +96,7 @@ class UpcomingFragment : Fragment() {
 
     private fun updateList(rootView: View, infoList: List<WeatherInfo>) {
         val layoutManager = LinearLayoutManager(context)
-        val adapter = ForecastAdapter(context, infoList)
+        val adapter = context?.let { ForecastAdapter(it, infoList) }
         val recycler = rootView.findViewById<RecyclerView>(R.id.recycler_view)
         recycler.layoutManager = layoutManager
         recycler.adapter = adapter
