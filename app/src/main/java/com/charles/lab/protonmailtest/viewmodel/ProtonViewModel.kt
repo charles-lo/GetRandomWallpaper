@@ -1,10 +1,10 @@
-package ch.protonmail.android.protonmailtest.viewmodel
+package com.charles.lab.protonmailtest.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ch.protonmail.android.protonmailtest.model.WeatherInfo
-import ch.protonmail.android.protonmailtest.repository.DataRepository
+import com.charles.lab.protonmailtest.model.WeatherInfo
+import com.charles.lab.protonmailtest.repository.DataRepository
 import org.koin.core.KoinComponent
 
 

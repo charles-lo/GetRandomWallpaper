@@ -1,7 +1,7 @@
-package ch.protonmail.android.protonmailtest
+package com.charles.lab.protonmailtest
 
-import ch.protonmail.android.protonmailtest.repository.DataRepository
-import ch.protonmail.android.protonmailtest.viewmodel.ProtonViewModel
+import com.charles.lab.protonmailtest.repository.DataRepository
+import com.charles.lab.protonmailtest.viewmodel.ProtonViewModel
 import com.google.gson.GsonBuilder
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module

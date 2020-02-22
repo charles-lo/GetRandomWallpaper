@@ -1,4 +1,4 @@
-package ch.protonmail.android.protonmailtest
+package com.charles.lab.protonmailtest
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("ch.protonmail.android.protonmailtest", appContext.packageName)
+        assertEquals("com.charles.lab.protonmailtest", appContext.packageName)
     }
 }

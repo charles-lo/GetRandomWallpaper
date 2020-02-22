@@ -1,7 +1,7 @@
-package ch.protonmail.android.protonmailtest.repository
+package com.charles.lab.protonmailtest.repository
 
-import ch.protonmail.android.protonmailtest.NetWorkApi
-import ch.protonmail.android.protonmailtest.model.WeatherInfo
+import com.charles.lab.protonmailtest.NetWorkApi
+import com.charles.lab.protonmailtest.model.WeatherInfo
 import retrofit2.Call
 import retrofit2.Response
 

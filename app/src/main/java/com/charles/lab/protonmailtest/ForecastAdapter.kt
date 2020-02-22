@@ -1,4 +1,4 @@
-package ch.protonmail.android.protonmailtest
+package com.charles.lab.protonmailtest
 
 import android.content.Context
 import android.content.Intent
@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import ch.protonmail.android.protonmailtest.ForecastAdapter.DayViewHolder
-import ch.protonmail.android.protonmailtest.model.WeatherInfo
+import com.charles.lab.protonmailtest.ForecastAdapter.DayViewHolder
+import com.charles.lab.protonmailtest.model.WeatherInfo
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.gson.Gson

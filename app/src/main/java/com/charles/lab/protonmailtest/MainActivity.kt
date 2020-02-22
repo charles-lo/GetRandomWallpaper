@@ -1,4 +1,4 @@
-package ch.protonmail.android.protonmailtest
+package com.charles.lab.protonmailtest
 
 import android.annotation.SuppressLint
 import android.os.Bundle

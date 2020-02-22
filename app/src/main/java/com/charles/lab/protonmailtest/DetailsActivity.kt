@@ -1,4 +1,4 @@
-package ch.protonmail.android.protonmailtest
+package com.charles.lab.protonmailtest
 
 import android.Manifest
 import android.content.Context
@@ -19,7 +19,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import ch.protonmail.android.protonmailtest.model.WeatherInfo
+import com.charles.lab.protonmailtest.model.WeatherInfo
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget

@@ -1,12 +1,10 @@
-package ch.protonmail.android.protonmailtest
+package com.charles.lab.protonmailtest
 
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
@@ -15,23 +13,23 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import ch.protonmail.android.protonmailtest.model.WeatherInfo
-import ch.protonmail.android.protonmailtest.viewmodel.ProtonViewModel
+import com.charles.lab.protonmailtest.model.WeatherInfo
+import com.charles.lab.protonmailtest.viewmodel.ProtonViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * Created by ProtonMail on 2/25/19.
- * Shows any days that have less than a 50% chance of rain, ordered hottest to coldest
- * */
-class HottestFragment : Fragment()  {
-    private val TAG = HottestFragment::class.simpleName
+ * Shows the upcoming list of days returned by the API in order of day
+ **/
+class UpcomingFragment : Fragment() {
+    private val TAG = UpcomingFragment::class.simpleName
     private val protonModel: ProtonViewModel by viewModel()
 
     companion object {
         private const val SHARED_PREF = "SHARED_PREF"
-        private const val HOTTEST = "HOTTEST"
+        private const val UPCOMING = "UPCOMING"
     }
 
     override fun onCreateView(
@@ -39,7 +37,7 @@ class HottestFragment : Fragment()  {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_hottest, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_upcoming, container, false)
         val swipeRefreshLayout = rootView.findViewById<SwipeRefreshLayout>(R.id.swipe_container)
         swipeRefreshLayout.setOnRefreshListener(refreshListener)
 
@@ -50,28 +48,29 @@ class HottestFragment : Fragment()  {
             Observer(function = fun(_: Boolean?) {
                 swipeRefreshLayout.isRefreshing = false
                 Toast.makeText(activity, "internet offline", Toast.LENGTH_SHORT).show()
-                activity?.findViewById<TextView>(R.id.offline)?.visibility = VISIBLE
+                activity?.findViewById<TextView>(R.id.offline)?.visibility = View.VISIBLE
             }
             )
         )
-        protonModel.listOfHottest.observe(
+
+        protonModel.getUpcoming()
+        protonModel.listOfUpcoming.observe(
             this,
             Observer(function = fun(infoList: List<WeatherInfo>?) {
                 infoList?.let {
                     swipeRefreshLayout.isRefreshing = false
-                    activity?.findViewById<TextView>(R.id.offline)?.visibility = GONE
+                    activity?.findViewById<TextView>(R.id.offline)?.visibility = View.GONE
                     if (infoList.isNotEmpty()) {
-                        val sortedList = infoList.filter { it.chance_rain < 0.5 }
-                            .sortedWith(compareByDescending(WeatherInfo::high))
+                        val sortedList = infoList.sortedWith(compareBy(WeatherInfo::day))
 
                         updateList(rootView, sortedList)
                         // save local cache
                         preference?.edit()
-                            ?.putString(HOTTEST, gSon.toJson(sortedList))
+                            ?.putString(UPCOMING, gSon.toJson(sortedList))
                             ?.apply()
                     } else {
-                        // check local cache
-                        val strCache: String? = preference?.getString(HOTTEST, "")
+                        // load local cache
+                        val strCache: String? = preference?.getString(UPCOMING, "")
                         val type = object : TypeToken<List<WeatherInfo>>() {}.type
 
                         if (strCache!!.isNotBlank()) {
@@ -88,12 +87,11 @@ class HottestFragment : Fragment()  {
                 }
             })
         )
-        protonModel.getHottest()
         return rootView
     }
 
     private val refreshListener = SwipeRefreshLayout.OnRefreshListener{
-        protonModel.getHottest()
+        protonModel.getUpcoming()
     }
 
     private fun updateList(rootView: View, infoList: List<WeatherInfo>) {

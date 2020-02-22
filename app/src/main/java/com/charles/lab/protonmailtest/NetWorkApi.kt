@@ -1,6 +1,6 @@
-package ch.protonmail.android.protonmailtest
+package com.charles.lab.protonmailtest
 
-import ch.protonmail.android.protonmailtest.model.WeatherInfo
+import com.charles.lab.protonmailtest.model.WeatherInfo
 import retrofit2.Call
 import retrofit2.http.GET
 

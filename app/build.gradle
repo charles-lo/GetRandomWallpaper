@@ -6,7 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "ch.protonmail.android.protonmailtest"
+        applicationId "com.charles.lab.protonmailtest"
         minSdkVersion 15
         targetSdkVersion 29
         versionCode 1
